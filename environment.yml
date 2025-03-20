@@ -1,0 +1,17 @@
+name: tokenset
+channels:
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.10
+  - pytorch-cuda=11.7
+  - pip:
+    - torch==2.1.0 
+    - torchvision 
+    - timm
+    - -e git+https://github.com/LTH14/torch-fidelity.git@master#egg=torch-fidelity
+    - numpy==1.26.0
+    - einops
+    - omegaconf
+    - tensorboard
+    - fire
