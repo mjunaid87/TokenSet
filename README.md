@@ -1,7 +1,7 @@
 # 🎨 Tokenize Image as a Set (TokenSet)
 Official PyTorch implementation for our paper **"Tokenize Image as a Set"**, a novel framework for set-based image tokenization and fixed-sum discrete generative modeling.
 
-[📄 **Paper PDF**](Your_paper_pdf_url_here)
+[📄 **Paper PDF**](https://arxiv.org/pdf/2503.16425)
 
 
 ## 🌟 Highlights of Our Approach
@@ -145,7 +145,7 @@ If you find this project helpful for your research or use it in your own work, p
 @article{geng2025tokenset,
   title   = {Tokenize Image as a Set},
   author  = {Zigang Geng, Mengde Xu, Han Hu, Shuyang Gu},
-  journal = {arxiv},
+  journal = {arXiv preprint arXiv:2503.16425},
   year    = {2025}
 }
 ```
